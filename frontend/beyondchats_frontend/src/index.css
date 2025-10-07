@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom utilities */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded shadow transition;
+}
+
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded shadow transition;
+}
+
+.card {
+  @apply bg-white shadow-md rounded-xl p-6 mb-6 transition hover:shadow-lg;
+}
+
+.input {
+  @apply w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400;
+}
+
+.heading {
+  @apply text-3xl font-bold text-blue-600 mb-4 text-center;
+}
+
