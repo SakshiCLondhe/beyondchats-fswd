@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -5,7 +6,10 @@ import QuizPage from "./pages/QuizPage";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import Register from "./pages/Register";
-import React, { useState, useEffect } from "react";
+
+// ✅ Import backend URL from config
+import { API_URL } from "./config";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState(localStorage.getItem("user"));
@@ -17,6 +21,13 @@ function App() {
     };
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  // Example: test API call to backend
+  useEffect(() => {
+    axios.get(`${API_URL}/api/users`)
+      .then(res => console.log("Users:", res.data))
+      .catch(err => console.error(err));
   }, []);
 
   return (
