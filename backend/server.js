@@ -17,6 +17,8 @@ app.get("/", (req, res) => {
 });
 
 // 5️⃣ Start server
-const PORT = process.env.PORT || 5000; // <-- here
+const PORT = process.env.PORT || 5000;
+const openaiKey = process.env.OPENAI_API_KEY;
+const mongoURI = process.env.MONGO_URI;
+ // <-- here
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // <-- here
-  
