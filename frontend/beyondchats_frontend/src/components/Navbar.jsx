@@ -5,7 +5,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -15,6 +15,8 @@ const Navbar = () => {
         <Link to="/" className="hover:underline">Home</Link>
         <Link to="/quiz" className="hover:underline">Quiz</Link>
         <Link to="/dashboard" className="hover:underline">Dashboard</Link>
+        <Link to="/chat" className="hover:underline">Chat</Link>
+        <Link to="/videos" className="hover:underline">Videos</Link>
         <button
           onClick={handleLogout}
           className="ml-4 bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition"
@@ -27,3 +29,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

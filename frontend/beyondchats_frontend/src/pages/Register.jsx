@@ -1,65 +1,53 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { API_URL } from "../config";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [message, setMessage] = useState("");
 
-  const handleRegister = (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your registration logic here
-    alert(`Registering ${name} with ${email}`);
+    try {
+      const res = await axios.post(`${API_URL}/api/users/register`, form);
+      setMessage(res.data.message);
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Something went wrong");
+    }
   };
 
   return (
-    <div
-  className="min-h-screen bg-no-repeat bg-center bg-cover flex items-center justify-center"
-  style={{ backgroundImage: "url('/digital-book-online-education-concept-blank-space-laptop_255625-423.jpg')" }}
->
-      <div className="bg-white bg-opacity-90 p-10 rounded-xl shadow-lg max-w-md w-full mx-4">
-        <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
-          Register
-        </h1>
-        <form onSubmit={handleRegister} className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition duration-300"
-          >
-            Register
-          </button>
-        </form>
-        <p className="mt-4 text-center text-gray-600">
-  Already have an account?{" "}
-  <Link to="/login" className="text-blue-600 hover:underline">
-    Login
-  </Link>
-</p>
-      </div>
+    <div className="p-4 max-w-md mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Register</h2>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          onChange={handleChange}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={handleChange}
+          className="border p-2 w-full rounded"
+        />
+        <button className="bg-blue-500 text-white p-2 rounded w-full">Register</button>
+      </form>
+      {message && <p className="mt-3 text-center">{message}</p>}
     </div>
   );
 };
