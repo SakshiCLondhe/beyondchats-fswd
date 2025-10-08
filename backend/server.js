@@ -1,26 +1,22 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+// index.js (or app.js, whatever your main file is)
+
+// 1️⃣ Import dependencies
+import express from "express"; // or const express = require("express");
 import cors from "cors";
 
-dotenv.config();
-
+// 2️⃣ Initialize app
 const app = express();
+
+// 3️⃣ Middleware
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
-
-mongoose
-  .connect(MONGO_URI, {
-    serverSelectionTimeoutMS: 5000, // optional: prevents long waits
-  })
-  .then(() => console.log("✅ MongoDB connected successfully"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
-
+// 4️⃣ Routes
 app.get("/", (req, res) => {
-  res.send("Backend is running!");
+  res.send("Hello from backend!");
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// 5️⃣ Start server
+const PORT = process.env.PORT || 5000; // <-- here
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // <-- here
+  
