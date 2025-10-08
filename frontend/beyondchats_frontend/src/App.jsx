@@ -1,71 +1,59 @@
+// src/App.jsx
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
-
-// Pages & Components
 import Navbar from "./components/Navbar";
+import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import QuizPage from "./pages/QuizPage";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import Register from "./pages/Register";
 
-// Backend URL
-import { API_URL } from "./config";
+const App = () => {
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-function App() {
-  // Store user as an object, parsed from localStorage
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
-
-  // Listen for login/logout changes in other tabs
   useEffect(() => {
     const handleStorageChange = () => {
-      setUser(JSON.parse(localStorage.getItem("user")));
+      const saved = localStorage.getItem("user");
+      setUser(saved ? JSON.parse(saved) : null);
     };
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // Optional: test backend connectivity
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/users`)
-      .then((res) => console.log("Users:", res.data))
-      .catch((err) => console.error(err));
-  }, []);
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar receives user */}
-      {user && <Navbar user={user} />}
-
+      {user && <Navbar />}
       <Routes>
-        {/* Public Routes */}
+        {/* Landing page route */}
+        <Route path="/" element={user ? <Navigate to="/home" replace /> : <LandingPage />} />
+
+        {/* Public routes */}
         {!user && (
           <>
             <Route path="/login" element={<LoginPage setUser={setUser} />} />
-            <Route
-              path="/register"
-              element={<Register setUser={setUser} />}
-            />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="/register" element={<Register />} />
           </>
         )}
 
-        {/* Private Routes */}
+        {/* Private routes */}
         {user && (
           <>
-            <Route path="/" element={<Home user={user} />} />
-            <Route path="/quiz" element={<QuizPage user={user} />} />
-            <Route path="/dashboard" element={<DashboardPage user={user} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/quiz" element={<QuizPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </>
         )}
+
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
-}
+};
 
 export default App;
+
