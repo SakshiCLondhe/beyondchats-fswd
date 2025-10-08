@@ -1,24 +1,29 @@
-// index.js (or app.js, whatever your main file is)
-
-// 1️⃣ Import dependencies
-import express from "express"; // or const express = require("express");
+import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-// 2️⃣ Initialize app
+// Import your routes
+import userRoutes from "./routes/users.js";
+import pdfRoutes from "./routes/pdfs.js";
+import quizRoutes from "./routes/quizzes.js";
+
+dotenv.config();
 const app = express();
 
-// 3️⃣ Middleware
 app.use(cors());
 app.use(express.json());
 
-// 4️⃣ Routes
-app.get("/", (req, res) => {
-  res.send("Hello from backend!");
-});
+// Routes
+app.use("/api/users", userRoutes);
+app.use("/api/pdfs", pdfRoutes);
+app.use("/api/quizzes", quizRoutes);
 
-// 5️⃣ Start server
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error(err));
+
+// Start server
 const PORT = process.env.PORT || 5000;
-const openaiKey = process.env.OPENAI_API_KEY;
-const mongoURI = process.env.MONGO_URI;
- // <-- here
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); // <-- here
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
