@@ -20,6 +20,7 @@ const LandingPage = () => {
         </p>
 
         <div className="flex justify-center gap-6 animate-fadeInUp">
+          {/* Navigation Links */}
           <Link
             to="/login"
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition-transform transform hover:scale-105 duration-300"

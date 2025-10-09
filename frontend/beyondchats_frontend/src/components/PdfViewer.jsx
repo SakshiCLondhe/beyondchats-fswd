@@ -1,27 +1,16 @@
 // src/components/PdfViewer.jsx
-import React, { useState } from "react";
+import React from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const PdfViewer = ({ pdfFile }) => {
-  const [numPages, setNumPages] = useState(null);
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-  if (!pdfFile) return null;
+const PdfViewer = ({ pdfUrl }) => {
+  if (!pdfUrl) return <p>No PDF selected</p>;
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-xl max-w-3xl mx-auto mt-6">
-      <Document
-        file={pdfFile}
-        onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-      >
-        {Array.from(new Array(numPages), (el, index) => (
-          <Page
-            key={index + 1}
-            pageNumber={index + 1}
-            className="mb-4 shadow-sm border rounded"
-            width={700}
-          />
-        ))}
+    <div className="border rounded-lg overflow-hidden shadow-md">
+      <Document file={pdfUrl}>
+        <Page pageNumber={1} width={600} />
       </Document>
     </div>
   );

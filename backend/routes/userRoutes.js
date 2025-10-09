@@ -4,25 +4,27 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
+// Test route
+router.get("/test", (req, res) => res.json({ message: "User route working fine" }));
+
+// Register
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const existing = await User.findOne({ email });
-    if (existing) return res.status(400).json({ message: "User exists" });
-    const existingUser = await User.findOne({ email });
-if (existingUser) {
-  return res.status(400).json({ message: "Email already exists" });
-}
+    if (existing) return res.status(400).json({ message: "Email already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
     const user = new User({ name, email, password: hashed });
     await user.save();
+
     res.status(201).json({ message: "User registered", user });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
+// Login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;

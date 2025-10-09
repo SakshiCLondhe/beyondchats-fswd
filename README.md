@@ -1,7 +1,4 @@
-# beyondchats-fswd
-Assignment
-
----
+# BeyondChats-FSWD
 
 ## 🚀 Features Implemented
 
@@ -24,7 +21,7 @@ Assignment
 - Frontend fully implemented (React + Vite + Tailwind CSS)  
 - Quiz generator and PDF upload working  
 - Authentication and user dashboard working  
-- Live frontend hosted on Vercel
+- Live frontend hosted on Vercel  
 
 ## ⚠️ What’s Missing / Pending
 - Backend deployment (if not hosted yet)  
@@ -34,11 +31,20 @@ Assignment
 
 ## 🧰 LLM / AI Tools Used
 - OpenAI API (GPT models) for generating quizzes from PDFs  
-- Purpose: Automatic MCQ, SAQ, LAQ generation for learning content  
+- **Purpose:** Automatic MCQ, SAQ, LAQ generation for learning content  
 
 ---
 
-## 🧩 Setup Instructions
+## 🛠 How I Built It
+- **Frontend:** React + Vite + Tailwind CSS for responsive UI and fast development  
+- **Backend:** Node.js + Express.js for REST APIs  
+- **Database:** MongoDB for storing user data, quizzes, and PDFs  
+- **Authentication:** JWT-based login/register system  
+- **LLM Integration:** OpenAI API to generate quizzes dynamically from uploaded PDFs  
+
+---
+
+## 📝 Project Setup
 
 ### Frontend
 ```bash

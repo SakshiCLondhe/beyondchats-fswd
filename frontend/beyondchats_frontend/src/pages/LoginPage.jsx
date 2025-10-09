@@ -1,68 +1,56 @@
-// src/pages/LoginPage.jsx
+// src/pages/Login.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-import { API_URL } from "../config";
+import { useNavigate } from "react-router-dom";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
 
-const LoginPage = ({ setUser }) => {
-  const navigate = useNavigate();
+const Login = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      const res = await axios.post(`${API_URL}/api/users/login`, { email, password });
-      localStorage.setItem("user", JSON.stringify(res.data));
-      setUser(res.data); // update App.jsx state
-      navigate("/"); // redirect to Home
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    }
+    if (email.trim() === "") return alert("Enter your email");
+    navigate("/home", { state: { email } });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleLogin} className="space-y-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-indigo-500 to-blue-600">
+      <div className="bg-white rounded-2xl shadow-2xl p-10 w-96 text-center animate-fadeInUp">
+        <UserCircleIcon className="w-16 h-16 mx-auto text-blue-600 mb-4" />
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back 👋</h2>
+        <p className="text-gray-500 mb-6">Login with your email to continue</p>
+
+        <form onSubmit={handleLogin}>
           <input
             type="email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            className="w-full border px-3 py-2 rounded"
-            required
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all"
           >
             Login
           </button>
         </form>
-        <p className="mt-4 text-center">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Register
-          </Link>
+
+        <p className="mt-6 text-sm text-gray-500">
+          Don’t have an account?{" "}
+          <span
+            onClick={() => navigate("/")}
+            className="text-blue-600 hover:underline cursor-pointer"
+          >
+            Go Back
+          </span>
         </p>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default Login;
+
 
