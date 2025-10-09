@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import userRoutes from "./routes/users.js";
 import pdfRoutes from "./routes/pdfs.js";
 import quizRoutes from "./routes/quizzes.js";
+import videoRoutes from "./routes/videos.js";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/pdfs", pdfRoutes);
 app.use("/api/quizzes", quizRoutes);
+app.use("/api/videos", videoRoutes);
+
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
