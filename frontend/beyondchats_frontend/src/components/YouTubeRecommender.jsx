@@ -1,105 +1,110 @@
 import React, { useState, useEffect } from "react";
 
-// Debounce hook
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+// Sample local data instead of YouTube API
+const sampleVideos = [
+  {
+    id: "1",
+    title: "Understanding AI in 10 Minutes",
+    channelTitle: "TechSimplified",
+    thumbnail: "https://img.youtube.com/vi/2ePf9rue1Ao/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=2ePf9rue1Ao",
+  },
+  {
+    id: "2",
+    title: "React JS Crash Course 2025",
+    channelTitle: "CodeWithHarry",
+    thumbnail: "https://img.youtube.com/vi/w7ejDZ8SWv8/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+  },
+  {
+    id: "3",
+    title: "NCERT Class 10 Physics Chapter 1 - Chemical Reactions",
+    channelTitle: "ExamFear Education",
+    thumbnail: "https://img.youtube.com/vi/ytXt3YIhAo0/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=ytXt3YIhAo0",
+  },
+  {
+    id: "4",
+    title: "Learn HTML & CSS Full Course",
+    channelTitle: "freeCodeCamp.org",
+    thumbnail: "https://img.youtube.com/vi/mU6anWqZJcc/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=mU6anWqZJcc",
+  },
+  {
+    id: "5",
+    title: "JavaScript for Beginners",
+    channelTitle: "Programming with Mosh",
+    thumbnail: "https://img.youtube.com/vi/W6NZfCO5SIk/hqdefault.jpg",
+    url: "https://www.youtube.com/watch?v=W6NZfCO5SIk",
+  },
+];
+
+const YouTubeRecommender = () => {
+  const [inputValue, setInputValue] = useState("");
+  const [filteredVideos, setFilteredVideos] = useState(sampleVideos);
+
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(handler);
-  }, [value, delay]);
-  return debouncedValue;
-};
-
-const YouTubeRecommender = ({ query }) => {
-  const [inputValue, setInputValue] = useState(query || "");
-  const [videos, setVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const debouncedQuery = useDebounce(inputValue, 800);
-
-  const fetchVideos = async (searchQuery) => {
-    if (!searchQuery) return;
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-          searchQuery
-        )}&type=video&maxResults=5&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+    if (!inputValue.trim()) {
+      setFilteredVideos(sampleVideos);
+    } else {
+      const results = sampleVideos.filter((v) =>
+        v.title.toLowerCase().includes(inputValue.toLowerCase())
       );
-      const data = await res.json();
-      setVideos(data.items || []);
-    } catch (err) {
-      console.error(err);
+      setFilteredVideos(results);
     }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (debouncedQuery) fetchVideos(debouncedQuery);
-    else setVideos([]);
-  }, [debouncedQuery]);
-
-  useEffect(() => {
-    if (query) setInputValue(query);
-  }, [query]);
+  }, [inputValue]);
 
   return (
-    <div className="p-4 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold text-red-600 mb-4 text-center drop-shadow-md">
+    <div className="p-6 max-w-6xl mx-auto text-center">
+      <h2 className="text-3xl font-bold text-red-600 mb-3 drop-shadow-md">
         Recommended YouTube Videos 🎥
       </h2>
-      <p className="text-center text-gray-700 mb-6">
-        Search for any topic or PDF chapter to get the best NCERT YouTube videos.
+      <p className="text-gray-700 mb-6">
+        Explore top educational and coding videos curated for you.
       </p>
 
       <input
         type="text"
-        placeholder="Enter topic or chapter..."
+        placeholder="Search topic (e.g. Physics, React, AI)..."
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        className="w-full p-3 border-2 border-gray-300 rounded-full mb-6 focus:ring-2 focus:ring-red-400 outline-none"
+        className="w-full sm:w-2/3 p-3 border-2 border-gray-300 rounded-full mb-6 focus:ring-2 focus:ring-red-400 outline-none"
       />
 
-      {loading && <p className="text-center text-gray-500">Loading videos...</p>}
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {videos.map((video) => (
+        {filteredVideos.map((video) => (
           <a
-            key={video.id.videoId}
-            href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
+            key={video.id}
+            href={video.url}
             target="_blank"
             rel="noreferrer"
-            className="bg-white shadow-lg rounded-xl overflow-hidden hover:scale-105 transition-transform"
+            className="bg-white shadow-xl rounded-xl overflow-hidden hover:scale-105 transition-transform border border-gray-200"
           >
             <img
-              src={video.snippet.thumbnails.high.url}
-              alt={video.snippet.title}
+              src={video.thumbnail}
+              alt={video.title}
               className="w-full h-44 object-cover"
             />
-            <div className="p-3">
+            <div className="p-3 text-left">
               <h3 className="font-semibold text-gray-800 hover:text-red-600">
-                {video.snippet.title.length > 60
-                  ? video.snippet.title.slice(0, 60) + "..."
-                  : video.snippet.title}
+                {video.title.length > 60
+                  ? video.title.slice(0, 60) + "..."
+                  : video.title}
               </h3>
-              <p className="text-sm text-gray-500 mt-1">{video.snippet.channelTitle}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {video.channelTitle}
+              </p>
             </div>
           </a>
         ))}
-
-        {/* Sample placeholder cards if API doesn't return videos */}
-        {videos.length === 0 && !loading &&
-          Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className="bg-gray-100 animate-pulse h-64 rounded-xl shadow-lg flex items-center justify-center text-gray-400 font-semibold"
-            >
-              Sample Video {i + 1}
-            </div>
-          ))}
       </div>
+
+      {filteredVideos.length === 0 && (
+        <p className="text-gray-500 mt-6">No matching videos found 😅</p>
+      )}
     </div>
   );
 };
 
 export default YouTubeRecommender;
+          
