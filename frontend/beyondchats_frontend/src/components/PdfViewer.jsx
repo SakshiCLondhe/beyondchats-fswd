@@ -1,13 +1,19 @@
 // src/components/PdfViewer.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const PdfViewer = ({ pdfUrl }) => {
+  const [numPages, setNumPages] = useState(null);
+
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
   if (!pdfUrl) {
     return (
-      <p className="text-center text-gray-500 mt-4 font-medium">
+      <p className="text-center text-gray-600 mt-6">
         No PDF selected. Please upload a file to preview.
       </p>
     );
@@ -20,18 +26,24 @@ const PdfViewer = ({ pdfUrl }) => {
           PDF Preview 📄
         </h2>
         <p className="text-center text-gray-600 mb-6">
-          Read your uploaded NCERT PDF here. Scroll down to see more pages.
+          Read your uploaded NCERT PDF here. Scroll down to see all pages.
         </p>
+
         <div className="flex flex-col items-center gap-6">
-          <Document file={pdfUrl}>
-            <Page pageNumber={1} width={600} className="rounded-xl shadow-md" />
-          </Document>
-          {/* Optional: Show more pages */}
-          {/* <Document file={pdfUrl}>
+          <Document
+            file={pdfUrl}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={(error) => console.error("Error loading PDF:", error)}
+          >
             {Array.from(new Array(numPages), (el, index) => (
-              <Page key={`page_${index + 1}`} pageNumber={index + 1} width={600} className="rounded-xl shadow-md" />
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={600}
+                className="rounded-xl shadow-md"
+              />
             ))}
-          </Document> */}
+          </Document>
         </div>
       </div>
     </div>
